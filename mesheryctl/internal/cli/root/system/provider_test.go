@@ -53,3 +53,129 @@ func TestRunProviderWithNoCmdOrFlag(t *testing.T) {
 	}
 	BreakupFunc()
 }
+
+func TestListProvideCmd(t *testing.T) {
+	SetupContextEnv(t)
+	tests := []CmdTestInput{
+		{
+			Name: "view with",
+			Args: "",
+			ExpectedResponse: "",
+		},
+		{
+			Name: "",
+			Args: "",
+			ExpectedResponse: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T){
+			SetupFunc()
+			SystemCmd.SetArgs(tt.Args)
+			err = SystemCmd.Execute()
+			if err != nil {
+				t.Error(err)
+			}
+
+			actualResponse := b.String()
+			expectedResponse := tt.ExpectedResponse
+
+			if expectedResponse != actualResponse {
+				t.Errorf("\nExpected response\n\n%v\n\nActual response\n\n%v\n\nMismatch between expected and actual response\n", expectedResponse, actualResponse)
+			
+			}
+			BreakupFunc()
+		})
+	}
+}
+
+func TestSetProviderCmd(t *testing.T) {
+	SetupContextEnv(t)
+	tests := []CmdTestInput{
+		{
+			Name: "",
+			Args: "",
+			ExpectedResponse: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T){
+			SetupFunc()
+			SystemCmd.SetArgs(tt.Args)
+			err = SystemCmd.Execute()
+			if err != nil {
+				t.Error(err)
+			}
+
+			actualResponse := b.String()
+			expectedResponse := tt.ExpectedResponse
+
+			if expectedResponse != actualResponse {
+				t.Errorf("\nExpected response\n\n%v\n\nActual response\n\n%v\n\nMismatch between expected and actual response\n", expectedResponse, actualResponse)
+			}
+			BreakupFunc()
+		})
+	}
+}
+
+func TestSwitchProviderCmd(t *testing.T){
+	SetupContextEnv(t)
+	tests := []CmdTestInput{
+		{
+			Name: "",
+			Args: "",
+			ExpectedResponse: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T){
+			SetupFunc()
+			SystemCmd.SetArgs(tt.Args)
+			err = SystemCmd.Execute()
+			if err != nil {
+				t.Error(err)
+			}
+
+			actualResponse := b.String()
+			expectedResponse := tt.ExpectedResponse
+
+			if expectedResponse != actualResponse {
+				t.Errorf("\nExpected response\n\n%v\n\nActual response\n\n%v\n\nMismatch between expected and actual response\n", expectedResponse, actualResponse)
+			}
+			BreakupFunc()
+		})
+	}
+}
+
+func TestResetProviderCmd(t *testing.T) {
+	SetupContextEnv(t)
+	tests := []CmdTestInput{
+		{
+			Name: "",
+			Args: "",
+			ExpectedResponse: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T){
+			SetupFunc()
+			SystemCmd.SetArgs(tt.Args)
+			err = SystemCmd.Execute()
+			if err != nil {
+				t.Error(err)
+			}
+
+			actualResponse := b.String()
+			expectedResponse := tt.ExpectedResponse
+
+			if expectedResponse != actualResponse {
+				t.Errorf("\nExpected response\n\n%v\n\nActual response\n\n%v\n\nMismatch between expected and actual response\n", expectedResponse, actualResponse)
+			}
+			BreakupFunc()
+		})
+	}
+}
