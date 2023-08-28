@@ -134,6 +134,44 @@ func (h *Handler) addK8SConfig(_ *models.User, _ *models.Preference, w http.Resp
 	}
 }
 
+func (h *Handler) selectK8SConfig(_ *models.User, _ *models.Preference, w http.ResponseWriter, req *http.Request, provider models.Provider){
+	_, ok := req.Context().Value(models.TokenCtxKey).(string)
+	if !ok {
+		err := ErrRetrieveUserToken(fmt.Errorf("failed to retrieve user token"))
+		logrus.Error(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	k8sConfigBytes, err := readK8sConfigFromBody(req)
+	if err != nil {
+		logrus.Error(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	flattenedK8sConfig, err := helpers.FlattenMinifyKubeConfig(*k8sConfigBytes)
+	if err == nil {
+		k8sConfigBytes = &flattenedK8sConfig
+	}
+	
+	mid, ok := viper.Get("INSTANCE_ID").(*uuid.UUID)
+	if !ok {
+		logrus.Error(ErrMesheryInstanceID)
+		http.Error(w, ErrMesheryInstanceID.Error(), http.StatusInternalServerError)
+		return
+	}
+	contexts, _ := models.K8sContextsFromKubeconfig(*k8sConfigBytes, mid)
+	availablecontexts := make([]string, 0)
+	for _, ctx := range contexts {
+		availablecontexts = append(availablecontexts, ctx.Name)
+	}
+
+	if err := json.NewEncoder(w).Encode(availablecontexts); err != nil {
+		logrus.Error(ErrMarshal(err, "available contexts"))
+		http.Error(w, ErrMarshal(err, "available contexts").Error(), http.StatusInternalServerError)
+		return
+	}
+
+}
 // swagger:route DELETE /api/system/kubernetes SystemAPI idDeleteK8SConfig
 // Handle DELETE request for Kubernetes Config
 //
